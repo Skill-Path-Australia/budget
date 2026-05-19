@@ -31,6 +31,22 @@ import * as XLSX from "xlsx";
 
 const STORAGE_KEY = "rssp-budget-assumptions";
 
+const storage = {
+  get: async (key) => {
+    if (window.storage) return window.storage.get(key);
+    const value = localStorage.getItem(key);
+    return value ? { value } : null;
+  },
+  set: async (key, value) => {
+    if (window.storage) return window.storage.set(key, value);
+    localStorage.setItem(key, value);
+  },
+  delete: async (key) => {
+    if (window.storage) return window.storage.delete(key);
+    localStorage.removeItem(key);
+  },
+};
+
 /* Living expense categories */
 const LC_LABELS = {
   accom: "Accommodation",
@@ -293,7 +309,7 @@ export default function App() {
   useEffect(() => {
     (async () => {
       try {
-        const result = await window.storage.get(STORAGE_KEY);
+        const result = await storage.get(STORAGE_KEY);
         if (result && result.value) {
           const s = JSON.parse(result.value);
           if (s.livingCosts) setLivingCosts(prev => ({ ...DEFAULTS().livingCosts, ...s.livingCosts }));
@@ -314,7 +330,7 @@ export default function App() {
   /* ── Save ── */
   const save = useCallback(async (lc, hpw, hw, rt, on, uat, uc, fc, esi) => {
     try {
-      await window.storage.set(STORAGE_KEY, JSON.stringify({
+      await storage.set(STORAGE_KEY, JSON.stringify({
         livingCosts: lc, hoursPerWeek: hpw, hourlyWage: hw, raType: rt, otherNote: on,
         utilAccomType: uat, utilClimate: uc, furnitureCost: fc, estimatedSavingsInput: esi,
       }));
@@ -335,7 +351,7 @@ export default function App() {
     setOtherNote(d.otherNote);
     setFurnitureCost(0);
     setEstimatedSavingsInput(0);
-    try { await window.storage.delete(STORAGE_KEY); } catch (_) {}
+    try { await storage.delete(STORAGE_KEY); } catch (_) {}
   };
 
   /* ── Derived ── */
