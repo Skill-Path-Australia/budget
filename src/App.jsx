@@ -535,7 +535,7 @@ export default function App() {
               </div>
               <p className="text-xs" style={{ color: "#6b7280" }}>
                 If you start working or your income from work changes you will need to notify Centrelink. See{" "}
-                <a href="https://www.servicesaustralia.gov.au/when-to-report-your-income-to-centrelink?context=43916" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.servicesaustralia.gov.au/when-to-report-your-income-to-centrelink" target="_blank" rel="noopener noreferrer"
                   style={{ color: C.navy, textDecoration: "underline", fontWeight: 700 }}>
                   this page
                 </a>{" "}for how to report changes in income to Centrelink.
