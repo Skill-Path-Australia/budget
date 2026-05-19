@@ -163,7 +163,7 @@ const C = { navy: "#385592", coral: "#de5240", cyan: "#cdf0f1", teal: "#2dcd9e" 
 
 const DEFAULTS = () => ({
   livingCosts: Object.fromEntries(Object.keys(LC_LABELS).map(k => [k, 0])),
-  hoursPerWeek: 0, hourlyWage: 0, raType: "single", otherNote: "",
+  hoursPerWeek: 0, hourlyWage: 0, raType: "single",
 });
 
 /* ═══ CALCULATION FUNCTIONS ═══ */
@@ -288,7 +288,6 @@ export default function App() {
   const [hoursPerWeek, setHoursPerWeek] = useState(0);
   const [hourlyWage, setHourlyWage] = useState(0);
   const [raType, setRaType] = useState("single");
-  const [otherNote, setOtherNote] = useState("");
 
   const [utilAccomType, setUtilAccomType] = useState("sharehouse");
   const [utilClimate, setUtilClimate] = useState("cool");
@@ -316,7 +315,6 @@ export default function App() {
           if (s.hoursPerWeek != null) setHoursPerWeek(s.hoursPerWeek);
           if (s.hourlyWage != null) setHourlyWage(s.hourlyWage);
           if (s.raType) setRaType(s.raType);
-          if (s.otherNote != null) setOtherNote(s.otherNote);
           if (s.utilAccomType) setUtilAccomType(s.utilAccomType);
           if (s.utilClimate) setUtilClimate(s.utilClimate);
           if (s.furnitureCost != null) setFurnitureCost(s.furnitureCost);
@@ -328,18 +326,18 @@ export default function App() {
   }, []);
 
   /* ── Save ── */
-  const save = useCallback(async (lc, hpw, hw, rt, on, uat, uc, fc, esi) => {
+  const save = useCallback(async (lc, hpw, hw, rt, uat, uc, fc, esi) => {
     try {
       await storage.set(STORAGE_KEY, JSON.stringify({
-        livingCosts: lc, hoursPerWeek: hpw, hourlyWage: hw, raType: rt, otherNote: on,
+        livingCosts: lc, hoursPerWeek: hpw, hourlyWage: hw, raType: rt,
         utilAccomType: uat, utilClimate: uc, furnitureCost: fc, estimatedSavingsInput: esi,
       }));
     } catch (_) {}
   }, []);
 
   useEffect(() => {
-    if (loaded) save(livingCosts, hoursPerWeek, hourlyWage, raType, otherNote, utilAccomType, utilClimate, furnitureCost, estimatedSavingsInput);
-  }, [livingCosts, hoursPerWeek, hourlyWage, raType, otherNote, utilAccomType, utilClimate, furnitureCost, estimatedSavingsInput, loaded, save]);
+    if (loaded) save(livingCosts, hoursPerWeek, hourlyWage, raType, utilAccomType, utilClimate, furnitureCost, estimatedSavingsInput);
+  }, [livingCosts, hoursPerWeek, hourlyWage, raType, utilAccomType, utilClimate, furnitureCost, estimatedSavingsInput, loaded, save]);
 
   /* ── Reset ── */
   const resetAll = async () => {
@@ -348,7 +346,6 @@ export default function App() {
     setHoursPerWeek(d.hoursPerWeek);
     setHourlyWage(d.hourlyWage);
     setRaType(d.raType);
-    setOtherNote(d.otherNote);
     setFurnitureCost(0);
     setEstimatedSavingsInput(0);
     try { await storage.delete(STORAGE_KEY); } catch (_) {}
